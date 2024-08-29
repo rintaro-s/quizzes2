@@ -1,6 +1,6 @@
 # starter_flutter
 
-A new Flutter project.
+A new Flutter の練習用のアプリです。
 
 ## Getting Started
 
