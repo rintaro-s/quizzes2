@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'dart:math';
 
 void main() {
   runApp(MyApp());
@@ -108,112 +107,114 @@ class _QuizHomePageState extends State<QuizHomePage> {
       appBar: AppBar(
         title: Text('Quiz App'),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            if (!_quizStarted) ...[
-              TextField(
-                controller: _questionController,
-                decoration: InputDecoration(
-                  labelText: 'Enter your question',
-                ),
-              ),
-              SizedBox(height: 10),
-              TextField(
-                controller: _answerController,
-                decoration: InputDecoration(
-                  labelText: 'Enter the answer',
-                ),
-              ),
-              SizedBox(height: 10),
-              ElevatedButton(
-                onPressed: _addQuestion,
-                child: Text('Add Question'),
-              ),
-              SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: _shuffleQuestions,
-                child: Text('Shuffle Questions'),
-              ),
-              SizedBox(height: 20),
-              Text('Questions List:', style: TextStyle(fontSize: 18)),
-              ..._questions.asMap().entries.map((entry) {
-                final index = entry.key;
-                final question = entry.value;
-                final isIncorrect = _incorrectQuestions.any(
-                        (q) => q['question'] == question['question']
-                );
-                return ListTile(
-                  title: Text(question['question']!),
-                  subtitle: Text(question['answer']!),
-                  trailing: isIncorrect
-                      ? Icon(Icons.circle, color: Colors.red, size: 24)
-                      : null,
-                  onLongPress: () => _deleteQuestion(index),
-                );
-              }).toList(),
-              SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: _questions.isNotEmpty ? _startQuiz : null,
-                child: Text('Start Quiz'),
-              ),
-            ],
-            if (_quizStarted) ...[
-              if (_currentQuestion.isNotEmpty) ...[
-                Text(
-                  'Question:',
-                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                ),
-                Text(
-                  _currentQuestion,
-                  style: TextStyle(fontSize: 24),
+      body: SingleChildScrollView( // Added SingleChildScrollView here
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column( // Kept the Column inside the SingleChildScrollView
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              if (!_quizStarted) ...[
+                TextField(
+                  controller: _questionController,
+                  decoration: InputDecoration(
+                    labelText: 'Enter your question',
+                  ),
                 ),
                 SizedBox(height: 10),
                 TextField(
-                  onChanged: (value) {
-                    setState(() {
-                      _userAnswer = value;
-                    });
-                  },
+                  controller: _answerController,
                   decoration: InputDecoration(
-                    labelText: 'Your Answer',
+                    labelText: 'Enter the answer',
                   ),
                 ),
                 SizedBox(height: 10),
                 ElevatedButton(
-                  onPressed: _checkAnswer,
-                  child: Text('Submit Answer'),
+                  onPressed: _addQuestion,
+                  child: Text('Add Question'),
+                ),
+                SizedBox(height: 20),
+                ElevatedButton(
+                  onPressed: _shuffleQuestions,
+                  child: Text('Shuffle Questions'),
+                ),
+                SizedBox(height: 20),
+                Text('Questions List:', style: TextStyle(fontSize: 18)),
+                ..._questions.asMap().entries.map((entry) {
+                  final index = entry.key;
+                  final question = entry.value;
+                  final isIncorrect = _incorrectQuestions.any(
+                          (q) => q['question'] == question['question']
+                  );
+                  return ListTile(
+                    title: Text(question['question']!),
+                    subtitle: Text(question['answer']!),
+                    trailing: isIncorrect
+                        ? Icon(Icons.circle, color: Colors.red, size: 24)
+                        : null,
+                    onLongPress: () => _deleteQuestion(index),
+                  );
+                }).toList(),
+                SizedBox(height: 20),
+                ElevatedButton(
+                  onPressed: _questions.isNotEmpty ? _startQuiz : null,
+                  child: Text('Start Quiz'),
                 ),
               ],
-              if (_currentQuestionIndex >= _questions.length) ...[
-                SizedBox(height: 20),
-                Text('Quiz Completed!', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
-                SizedBox(height: 10),
-                Text('Incorrect Questions:', style: TextStyle(fontSize: 18)),
-                ..._incorrectQuestions.map((q) => ListTile(
-                  title: Text(q['question']!),
-                  subtitle: Text(q['answer']!),
-                )),
-                SizedBox(height: 20),
-                ElevatedButton(
-                  onPressed: () {
-                    setState(() {
-                      _questions.clear();
-                      _incorrectQuestions.clear();
-                    });
-                  },
-                  child: Text('Clear All Questions'),
-                ),
-                SizedBox(height: 10),
-                ElevatedButton(
-                  onPressed: _startQuiz,
-                  child: Text('Restart Quiz'),
-                ),
+              if (_quizStarted) ...[
+                if (_currentQuestion.isNotEmpty) ...[
+                  Text(
+                    'Question:',
+                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                  ),
+                  Text(
+                    _currentQuestion,
+                    style: TextStyle(fontSize: 24),
+                  ),
+                  SizedBox(height: 10),
+                  TextField(
+                    onChanged: (value) {
+                      setState(() {
+                        _userAnswer = value;
+                      });
+                    },
+                    decoration: InputDecoration(
+                      labelText: 'Your Answer',
+                    ),
+                  ),
+                  SizedBox(height: 10),
+                  ElevatedButton(
+                    onPressed: _checkAnswer,
+                    child: Text('Submit Answer'),
+                  ),
+                ],
+                if (_currentQuestionIndex >= _questions.length) ...[
+                  SizedBox(height: 20),
+                  Text('Quiz Completed!', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+                  SizedBox(height: 10),
+                  Text('Incorrect Questions:', style: TextStyle(fontSize: 18)),
+                  ..._incorrectQuestions.map((q) => ListTile(
+                    title: Text(q['question']!),
+                    subtitle: Text(q['answer']!),
+                  )),
+                  SizedBox(height: 20),
+                  ElevatedButton(
+                    onPressed: () {
+                      setState(() {
+                        _questions.clear();
+                        _incorrectQuestions.clear();
+                      });
+                    },
+                    child: Text('Clear All Questions'),
+                  ),
+                  SizedBox(height: 10),
+                  ElevatedButton(
+                    onPressed: _startQuiz,
+                    child: Text('Restart Quiz'),
+                  ),
+                ],
               ],
             ],
-          ],
+          ),
         ),
       ),
     );
