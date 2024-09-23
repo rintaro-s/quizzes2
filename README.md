@@ -1,7 +1,8 @@
 # starter_flutter
+Flutter の練習用で作ったアプリです
 ![image](https://github.com/user-attachments/assets/b0f76d63-946f-4585-a14c-b4f0d3003d0f)
 
-A new Flutter の練習用のアプリです。
+。
 
 ## Getting Started
 
